@@ -1,0 +1,104 @@
+<?php
+session_start();
+$path=$_SERVER['DOCUMENT_ROOT'];
+require_once "$path/sys/db.php";
+
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+	<? include_once "$path/private/head.php"; ?>
+   <body>
+    <? include_once "$path/private/header_product.php"; ?>
+	<div class="categorMen1">
+	<a href="/main">Главная</a>
+	<div>
+		<svg width="10" height="7" viewBox="0 0 7 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M6.17678 2.17678C6.27441 2.07915 6.27441 1.92085 6.17678 1.82322L4.58579 0.232233C4.48816 0.134602 4.32986 0.134602 4.23223 0.232233C4.1346 0.329864 4.1346 0.488155 4.23223 0.585786L5.64645 2L4.23223 3.41421C4.1346 3.51184 4.1346 3.67014 4.23223 3.76777C4.32986 3.8654 4.48816 3.8654 4.58579 3.76777L6.17678 2.17678ZM0 2.25L6 2.25V1.75L0 1.75L0 2.25Z" fill="black"/>
+		</svg>
+		</div>
+        <a href="/Man" id="men1">Мужчины</a>
+    <div>
+    <svg width="10" height="7" viewBox="0 0 7 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M6.17678 2.17678C6.27441 2.07915 6.27441 1.92085 6.17678 1.82322L4.58579 0.232233C4.48816 0.134602 4.32986 0.134602 4.23223 0.232233C4.1346 0.329864 4.1346 0.488155 4.23223 0.585786L5.64645 2L4.23223 3.41421C4.1346 3.51184 4.1346 3.67014 4.23223 3.76777C4.32986 3.8654 4.48816 3.8654 4.58579 3.76777L6.17678 2.17678ZM0 2.25L6 2.25V1.75L0 1.75L0 2.25Z" fill="black"/>
+		</svg>
+</div>
+<div>Джинсы</div>
+</div>
+<div class="product__category">
+	<a href="/hudiMen">Худи</a>
+	<a href="/jeansMen">Брюки/джинсы</a>
+	<a href="/sweaterMen">Свитеры</a>
+	<a href="/jacketsMen">Куртки</a>
+	<a href="/shoesCatMen">Обувь</a>
+	<a href="/accesCatMen">Акуссуары</a>
+	<a href="/t-shirtsMen">Футболки</a>
+</div>
+<div id="lineProduct"><hr><hr></div>
+<div class="main__in__content" id="searchPage">
+<div class="product_glav">
+<?
+				
+				
+					
+                ///////////////// КОНЕЦ проверки /////////////////////////////////////////
+
+
+
+
+
+
+
+
+                // запрос на основе нашего фильтра!!!! к таблице products
+
+            
+                //обрабатываем запрос. Для вывода карточек товара из нашей таблицы
+                $search=$db->query("SELECT `name`,`price`,`link_img`,`id` FROM `products` WHERE `cat_men`=2 ORDER BY `name` ");
+                foreach($search as $row){?>
+						
+                    <div class="productCard">
+                    
+                        <div id="img_product"><img src="/img/<?echo $row['link_img'];?>" alt=""></div>
+                        <div class="dd">
+                        <a href="#" id="like_product"><svg width="20" height="20" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.5 1.00006C2.5673 1.00006 1 2.49119 1 4.33087C1 5.81593 1.6125 9.34053 7.6416 12.9035C7.7496 12.9667 7.87358 13.0001 8 13.0001C8.12642 13.0001 8.2504 12.9667 8.3584 12.9035C14.3875 9.34053 15 5.81593 15 4.33087C15 2.49119 13.4327 1.00006 11.5 1.00006C9.5673 1.00006 8 3.01873 8 3.01873C8 3.01873 6.4327 1.00006 4.5 1.00006Z" fill="white" stroke="#59F955" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                </a> 
+                </div>
+                        <div id="name_product"><a href="/product/card-product.php?productid=<?echo $row['id']?>"><?echo $row['name']; ?></a></div>
+                        <div id="price"><?echo $row['price']; ?></div>
+                        <div id="size">Размеры: M, S, XL.</div>
+                        <div data-idproduct=<?echo $row['id']?> class="goods"></div>
+                    </div>
+
+                <?}
+            
+        ?>
+				</div>
+		
+                <script>
+			searchPage.onclick = event =>{
+		
+		if(event.target.className=="goods"){
+			//console.log(event.target.dataset.idproduct);
+			fetch("/sys/addProductTocart.php", {  
+				method: 'post',  
+				headers: {  
+				"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"  
+				},  
+				body: `id=${event.target.dataset.idproduct}`
+			   })
+			.then(()=>console.log("Успех!"));
+			
+			 
+		}
+		//event.target.dataset.idproduct - id продукта который мы будем передавать в базу данных
+
+	}
+	 </script>
+     </body>
+     </html>

@@ -1,0 +1,40 @@
+<?php
+session_start();
+$path=$_SERVER['DOCUMENT_ROOT'];
+require_once "$path/sys/db.php";
+
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+	<? include_once "$path/private/head.php"; ?>
+   
+    <? include_once "$path/private/header_product.php"; ?>
+    <?
+					if(isset($_GET['search'])){
+						
+						$searchQueryProducts=$db->query("SELECT * FROM `products` WHERE `name` LIKE '%$_GET[search]%' ORDER BY `name` ASC");
+						//var_dump($searchQuery);
+						// echo "<h2>Результаты поиска: </h2>";
+						
+                        $search=$db->query("SELECT `name`,`price`,`link_img`,`id` FROM `products` WHERE `status`=1  ORDER BY `name` ");
+						
+						
+							foreach($searchQueryProducts as $row){
+                                foreach($search as $rows){?>
+						
+                                  <div class="productCard">
+                                  
+                                      <div><img src="/img/<?echo $rows['link_img'];?>" alt=""></div>
+                                      <div><a href="/card-product?productid=<?echo $rows['id']?>"><?echo $rows['name']; ?></a></div>
+                                      <div><?echo $rows['price']; ?></div>
+                                      <div>description</div>
+                                      <div data-idproduct=<?echo $rows['id']?> class="goods">Add to Card</div>
+                                  </div>
+        
+                              <?}
+							}	
+						}
+?>
